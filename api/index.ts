@@ -1,6 +1,6 @@
 
 
-Claude finished the response
+
 api/inex.ts - import app from "../server";
 export default app;
 vercel.jason - {
