@@ -12,6 +12,17 @@ const PORT = 3000;
 
 app.use(express.json());
 
+// Enable CORS for all requests, including sandboxed iframes
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 // In-memory caching/handling of files
 const BASES_FILE = path.join(process.cwd(), "data", "bases.txt");
 const PIZZAS_FILE = path.join(process.cwd(), "data", "pizzas.txt");
@@ -32,9 +43,9 @@ async function ensureDataFolder() {
 let aiClient: GoogleGenAI | null = null;
 function getGeminiClient(): GoogleGenAI {
   if (!aiClient) {
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      throw new Error("GEMINI_API_KEY is not configured in Secrets. Please configure it in Settings > Secrets.");
+      throw new Error("GOOGLE_API_KEY or GEMINI_API_KEY is not configured. Please configure it in your environment variables or Secrets.");
     }
     aiClient = new GoogleGenAI({
       apiKey,
@@ -120,33 +131,47 @@ async function loadToppings() {
   }
 }
 
+let ordersCache: any[] | null = null;
+
 async function loadOrders() {
+  if (ordersCache) return ordersCache;
   try {
     const data = await fs.readFile(ORDERS_JSON_FILE, "utf-8");
-    return JSON.parse(data);
+    ordersCache = JSON.parse(data);
+    return ordersCache;
   } catch (err) {
     console.error("Error loading orders.json, starting empty", err);
-    return [];
+    ordersCache = [];
+    return ordersCache;
   }
 }
 
 async function saveOrders(orders: any[]) {
-  await ensureDataFolder();
-  await fs.writeFile(ORDERS_JSON_FILE, JSON.stringify(orders, null, 2), "utf-8");
+  ordersCache = orders;
+  try {
+    await ensureDataFolder();
+    await fs.writeFile(ORDERS_JSON_FILE, JSON.stringify(orders, null, 2), "utf-8");
+  } catch (err) {
+    console.error("Failed to write orders.json (this is expected in read-only environments like Vercel):", err);
+  }
 }
 
 // Appends order to orders_log.txt
 async function appendToOrderLog(order: any) {
-  await ensureDataFolder();
-  const itemSummary = order.items
-    .map((item: any) => {
-      const toppingsStr = item.toppings.length > 0 ? `, Toppings: ${item.toppings.join(", ")}` : "";
-      return `${item.quantity}x ${item.pizzaName} [${item.baseName}, ${item.size}${toppingsStr}]`;
-    })
-    .join(" + ");
+  try {
+    await ensureDataFolder();
+    const itemSummary = order.items
+      .map((item: any) => {
+        const toppingsStr = item.toppings.length > 0 ? `, Toppings: ${item.toppings.join(", ")}` : "";
+        return `${item.quantity}x ${item.pizzaName} [${item.baseName}, ${item.size}${toppingsStr}]`;
+      })
+      .join(" + ");
 
-  const logLine = `${order.id} | ${order.timestamp} | ${order.customerName} | ${order.customerPhone} | ${itemSummary} | ${order.subtotal} | ${order.discount} | ${order.gst} | ${order.total} | ${order.paymentMode} | ${order.status}\n`;
-  await fs.appendFile(ORDERS_LOG_FILE, logLine, "utf-8");
+    const logLine = `${order.id} | ${order.timestamp} | ${order.customerName} | ${order.customerPhone} | ${itemSummary} | ${order.subtotal} | ${order.discount} | ${order.gst} | ${order.total} | ${order.paymentMode} | ${order.status}\n`;
+    await fs.appendFile(ORDERS_LOG_FILE, logLine, "utf-8");
+  } catch (err) {
+    console.error("Failed to append to orders_log.txt (this is expected in read-only environments like Vercel):", err);
+  }
 }
 
 // API Routes
@@ -492,9 +517,15 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://0.0.0.0:${PORT}`);
-  });
+  if (!process.env.VERCEL) {
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running on http://0.0.0.0:${PORT}`);
+    });
+  }
 }
 
-startServer();
+if (!process.env.VERCEL) {
+  startServer();
+}
+
+export default app;
