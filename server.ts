@@ -1,7 +1,6 @@
 import express from "express";
 import path from "path";
 import fs from "fs/promises";
-import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
 
@@ -504,6 +503,7 @@ async function startServer() {
   await ensureDataFolder();
 
   if (process.env.NODE_ENV !== "production") {
+    const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
