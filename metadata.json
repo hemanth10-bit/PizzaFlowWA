@@ -1,0 +1,6 @@
+{
+  "name": "SliceMatic",
+  "description": "A full-stack pizza ordering and admin management system with order tracking, custom pizza building, dashboard analytics, and AI-powered forecasting.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

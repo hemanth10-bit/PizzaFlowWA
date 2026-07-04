@@ -1,0 +1,288 @@
+[
+  {
+    "id": "ORD-1001",
+    "customerName": "Ramesh Kumar",
+    "customerPhone": "9876543210",
+    "timestamp": "2026-06-25T13:15:00.000Z",
+    "items": [
+      {
+        "pizzaName": "Margherita",
+        "baseName": "Thin Crust",
+        "size": "Medium",
+        "toppings": ["Extra Cheese", "Black Olives"],
+        "quantity": 2,
+        "price": 515
+      }
+    ],
+    "subtotal": 1030,
+    "discount": 0,
+    "gst": 185.4,
+    "total": 1215.4,
+    "paymentMode": "UPI",
+    "status": "completed"
+  },
+  {
+    "id": "ORD-1002",
+    "customerName": "Anjali Sharma",
+    "customerPhone": "8765432109",
+    "timestamp": "2026-06-25T20:30:00.000Z",
+    "items": [
+      {
+        "pizzaName": "Veggie Supreme",
+        "baseName": "Thick Crust",
+        "size": "Large",
+        "toppings": ["Mushrooms", "Jalapenos"],
+        "quantity": 5,
+        "price": 740
+      }
+    ],
+    "subtotal": 3700,
+    "discount": 370,
+    "gst": 599.4,
+    "total": 3929.4,
+    "paymentMode": "Card",
+    "status": "completed"
+  },
+  {
+    "id": "ORD-1003",
+    "customerName": "Vikram Singh",
+    "customerPhone": "7654321098",
+    "timestamp": "2026-06-26T12:00:00.000Z",
+    "items": [
+      {
+        "pizzaName": "Chicken BBQ",
+        "baseName": "Cheese Burst",
+        "size": "Medium",
+        "toppings": ["Extra Cheese", "Grilled Chicken"],
+        "quantity": 1,
+        "price": 810
+      }
+    ],
+    "subtotal": 810,
+    "discount": 0,
+    "gst": 145.8,
+    "total": 955.8,
+    "paymentMode": "UPI",
+    "status": "completed"
+  },
+  {
+    "id": "ORD-1004",
+    "customerName": "Pooja Patel",
+    "customerPhone": "6543210987",
+    "timestamp": "2026-06-27T19:45:00.000Z",
+    "items": [
+      {
+        "pizzaName": "Paneer Tikka",
+        "baseName": "Thin Crust",
+        "size": "Medium",
+        "toppings": ["Mushrooms", "Golden Corn"],
+        "quantity": 3,
+        "price": 615
+      }
+    ],
+    "subtotal": 1845,
+    "discount": 0,
+    "gst": 332.1,
+    "total": 2177.1,
+    "paymentMode": "Cash",
+    "status": "completed"
+  },
+  {
+    "id": "ORD-1005",
+    "customerName": "Amit Mishra",
+    "customerPhone": "9988776655",
+    "timestamp": "2026-06-28T21:00:00.000Z",
+    "items": [
+      {
+        "pizzaName": "Pepperoni Feast",
+        "baseName": "Thick Crust",
+        "size": "Large",
+        "toppings": ["Extra Cheese", "Pepperoni Slices"],
+        "quantity": 1,
+        "price": 920
+      }
+    ],
+    "subtotal": 920,
+    "discount": 0,
+    "gst": 165.6,
+    "total": 1085.6,
+    "paymentMode": "Card",
+    "status": "completed"
+  },
+  {
+    "id": "ORD-1006",
+    "customerName": "Neha Gupta",
+    "customerPhone": "8877665544",
+    "timestamp": "2026-06-29T14:30:00.000Z",
+    "items": [
+      {
+        "pizzaName": "Margherita",
+        "baseName": "Thin Crust",
+        "size": "Small",
+        "toppings": [],
+        "quantity": 2,
+        "price": 350
+      }
+    ],
+    "subtotal": 700,
+    "discount": 0,
+    "gst": 126,
+    "total": 826,
+    "paymentMode": "UPI",
+    "status": "completed"
+  },
+  {
+    "id": "ORD-1007",
+    "customerName": "Siddharth Sen",
+    "customerPhone": "7766554433",
+    "timestamp": "2026-06-30T20:15:00.000Z",
+    "items": [
+      {
+        "pizzaName": "Veggie Supreme",
+        "baseName": "Gluten Free",
+        "size": "Medium",
+        "toppings": ["Black Olives", "Jalapenos"],
+        "quantity": 6,
+        "price": 650
+      }
+    ],
+    "subtotal": 3900,
+    "discount": 390,
+    "gst": 631.8,
+    "total": 4141.8,
+    "paymentMode": "UPI",
+    "status": "completed"
+  },
+  {
+    "id": "ORD-1008",
+    "customerName": "Karan Malhotra",
+    "customerPhone": "6655443322",
+    "timestamp": "2026-07-01T13:00:00.000Z",
+    "items": [
+      {
+        "pizzaName": "Chicken BBQ",
+        "baseName": "Thick Crust",
+        "size": "Large",
+        "toppings": ["Extra Cheese", "Black Olives"],
+        "quantity": 2,
+        "price": 845
+      }
+    ],
+    "subtotal": 1690,
+    "discount": 0,
+    "gst": 304.2,
+    "total": 1994.2,
+    "paymentMode": "Card",
+    "status": "completed"
+  },
+  {
+    "id": "ORD-1009",
+    "customerName": "Rohan Das",
+    "customerPhone": "9123456789",
+    "timestamp": "2026-07-01T18:45:00.000Z",
+    "items": [
+      {
+        "pizzaName": "Paneer Tikka",
+        "baseName": "Cheese Burst",
+        "size": "Large",
+        "toppings": ["Paneer Cubes"],
+        "quantity": 1,
+        "price": 855
+      }
+    ],
+    "subtotal": 855,
+    "discount": 0,
+    "gst": 153.9,
+    "total": 1008.9,
+    "paymentMode": "Cash",
+    "status": "completed"
+  },
+  {
+    "id": "ORD-1010",
+    "customerName": "Divya Reddy",
+    "customerPhone": "8234567890",
+    "timestamp": "2026-07-02T19:30:00.000Z",
+    "items": [
+      {
+        "pizzaName": "Margherita",
+        "baseName": "Thin Crust",
+        "size": "Large",
+        "toppings": ["Extra Cheese", "Black Olives", "Mushrooms"],
+        "quantity": 5,
+        "price": 660
+      }
+    ],
+    "subtotal": 3300,
+    "discount": 330,
+    "gst": 534.6,
+    "total": 3504.6,
+    "paymentMode": "UPI",
+    "status": "completed"
+  },
+  {
+    "id": "ORD-1011",
+    "customerName": "Sanjay Joshi",
+    "customerPhone": "7345678901",
+    "timestamp": "2026-07-02T21:15:00.000Z",
+    "items": [
+      {
+        "pizzaName": "Pepperoni Feast",
+        "baseName": "Thin Crust",
+        "size": "Medium",
+        "toppings": ["Pepperoni Slices"],
+        "quantity": 2,
+        "price": 690
+      }
+    ],
+    "subtotal": 1380,
+    "discount": 0,
+    "gst": 248.4,
+    "total": 1628.4,
+    "paymentMode": "UPI",
+    "status": "completed"
+  },
+  {
+    "id": "ORD-1012",
+    "customerName": "Preeti Nair",
+    "customerPhone": "6456789012",
+    "timestamp": "2026-07-03T12:15:00.000Z",
+    "items": [
+      {
+        "pizzaName": "Veggie Supreme",
+        "baseName": "Gluten Free",
+        "size": "Medium",
+        "toppings": ["Black Olives", "Mushrooms"],
+        "quantity": 1,
+        "price": 650
+      }
+    ],
+    "subtotal": 650,
+    "discount": 0,
+    "gst": 117,
+    "total": 767,
+    "paymentMode": "Card",
+    "status": "completed"
+  },
+  {
+    "id": "ORD-1013",
+    "customerName": "Gaurav Verma",
+    "customerPhone": "9567890123",
+    "timestamp": "2026-07-03T18:00:00.000Z",
+    "items": [
+      {
+        "pizzaName": "Chicken BBQ",
+        "baseName": "Thick Crust",
+        "size": "Large",
+        "toppings": ["Extra Cheese"],
+        "quantity": 2,
+        "price": 800
+      }
+    ],
+    "subtotal": 1600,
+    "discount": 0,
+    "gst": 288,
+    "total": 1888,
+    "paymentMode": "UPI",
+    "status": "completed"
+  }
+]

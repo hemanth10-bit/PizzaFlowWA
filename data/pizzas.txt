@@ -1,0 +1,8 @@
+Margherita | 299 | Classic tomato sauce, mozzarella, and fresh basil | Veg
+Chicago Deep Dish | 349 | Classic thick crust pizza with deep layer of cheese and chunky tomato sauce | Veg
+Greek Mediterranean | 329 | Feta cheese, olives, cherry tomatoes, and red onions | Veg
+California Veggie | 339 | Fresh broccoli, tomatoes, mushrooms, and zucchini | Veg
+Farm House | 319 | Delightful combination of onion, capsicum, tomato, and grilled mushroom | Veg
+Pepperoni Classic | 369 | Double pepperoni slices with extra mozzarella cheese | Non-Veg
+BBQ Chicken | 379 | Grilled barbecue chicken, red onions, and cilantro | Non-Veg
+Paneer Tikka | 349 | Spicy marinated paneer cubes, capsicum, and onions | Veg
