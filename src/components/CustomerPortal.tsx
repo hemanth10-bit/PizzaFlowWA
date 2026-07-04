@@ -12,7 +12,7 @@ const PIZZA_IMAGES: Record<string, string> = {
   "Farm House": "https://images.unsplash.com/photo-1590947132387-155cc02f3212?auto=format&fit=crop&w=600&q=80",
   "Pepperoni Classic": "https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=600&q=80",
   "BBQ Chicken": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80",
-  "Paneer Tikka": "src/components/Paneer-Pizza-7.jpg"
+  "Paneer Tikka": "/Paneer-Pizza-7.jpg"
 };
 
 const getPizzaImage = (name: string): string => {
