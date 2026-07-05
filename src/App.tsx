@@ -75,72 +75,74 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col text-slate-950 selection:bg-indigo-600 selection:text-white" id="slicematic-app-root">
       {/* Top Brand Navbar */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 h-18 flex items-center justify-between">
-          {/* Logo brand */}
-          <div className="flex items-center gap-3">
-            <motion.div
-              className="p-2.5 bg-indigo-600 rounded-2xl text-white shadow-md shadow-indigo-100"
-              animate={{ scale: [1, 1.02, 0.98, 1] }}
-              transition={{ repeat: Infinity, duration: 6 }}
-            >
-              <Pizza className="w-6 h-6" />
-            </motion.div>
-            <div>
-              <h1 className="text-xl font-black font-display tracking-tight text-slate-900 leading-none">
-                SliceMatic
-              </h1>
-              <span className="text-3xs font-bold text-slate-400 font-mono tracking-wide uppercase">Pristine Pizzas & Intelligent Kitchens</span>
-            </div>
-          </div>
+<header className="bg-white border-b border-warm-200 sticky top-0 z-40 shadow-xs">
+  <div className="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+    {/* Logo brand */}
+    <div className="flex items-center gap-3 min-w-0">
+      <motion.div
+        className="p-2.5 bg-tomato-600 rounded-2xl text-white shadow-md shadow-tomato-900/20 shrink-0"
+        animate={{ scale: [1, 1.02, 0.98, 1] }}
+        transition={{ repeat: Infinity, duration: 6 }}
+      >
+        <Pizza className="w-6 h-6" />
+      </motion.div>
+      <div className="min-w-0">
+        <h1 className="text-xl font-black font-display tracking-tight text-crust-900 leading-none">
+          SliceMatic
+        </h1>
+        <span className="hidden sm:block text-3xs font-bold text-warm-400 font-mono tracking-wide uppercase truncate">
+          Pristine Pizzas & Intelligent Kitchens
+        </span>
+      </div>
+    </div>
 
-          {/* Nav switcher (Customer Portal vs Staff Panel) */}
-          <div className="flex items-center gap-3">
-            <div className="flex bg-slate-100 p-1 rounded-xl">
-              <button
-                onClick={() => setViewMode("customer")}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-                  viewMode === "customer"
-                    ? "bg-white text-indigo-600 shadow-xs"
-                    : "text-slate-500 hover:text-slate-950"
-                }`}
-                id="btn-nav-customer"
-              >
-                <User className="w-3.5 h-3.5" />
-                Customer Menu
-              </button>
+    {/* Nav switcher (Customer Portal vs Staff Panel) */}
+    <div className="flex items-center gap-3 shrink-0">
+      <div className="flex bg-warm-100 p-1 rounded-xl">
+        <button
+          onClick={() => setViewMode("customer")}
+          className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
+            viewMode === "customer"
+              ? "bg-white text-tomato-600 shadow-xs"
+              : "text-warm-500 hover:text-crust-900"
+          }`}
+          id="btn-nav-customer"
+        >
+          <User className="w-3.5 h-3.5" />
+          <span className="hidden xs:inline">Customer </span>Menu
+        </button>
 
-              <button
-                onClick={() => setViewMode("admin")}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-                  viewMode === "admin"
-                    ? "bg-white text-indigo-600 shadow-xs"
-                    : "text-slate-500 hover:text-slate-950"
-                }`}
-                id="btn-nav-admin"
-              >
-                <ChefHat className="w-3.5 h-3.5 text-indigo-600" />
-                Staff Portal
-              </button>
-            </div>
+        <button
+          onClick={() => setViewMode("admin")}
+          className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
+            viewMode === "admin"
+              ? "bg-white text-tomato-600 shadow-xs"
+              : "text-warm-500 hover:text-crust-900"
+          }`}
+          id="btn-nav-admin"
+        >
+          <ChefHat className="w-3.5 h-3.5 text-tomato-500" />
+          Staff Portal
+        </button>
+      </div>
 
-            {viewMode === "admin" && isStaffAuthenticated && (
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={async () => {
-                    await supabase.auth.signOut();
-                  }}
-                  className="flex items-center gap-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs py-2 px-3 rounded-xl border border-rose-100 transition-all cursor-pointer"
-                  id="btn-nav-logout"
-                >
-                  <LogOut className="w-3.5 h-3.5" />
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
+      {viewMode === "admin" && isStaffAuthenticated && (
+        <div className="flex items-center gap-2">
+          <button
+            onClick={async () => {
+              await supabase.auth.signOut();
+            }}
+            className="flex items-center gap-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs py-2 px-3 rounded-xl border border-rose-100 transition-all cursor-pointer"
+            id="btn-nav-logout"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Logout</span>
+          </button>
         </div>
-      </header>
+      )}
+    </div>
+  </div>
+</header>
 
       {/* Main Content Body */}
       <main className="flex-1 py-8">
