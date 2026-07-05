@@ -1,16 +1,52 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Space Grotesk", sans-serif;
+  --font-display: "Fraunces", serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Wood-Fired palette — tomato red as primary accent */
+  --color-tomato-50: #fdf0ef;
+  --color-tomato-100: #fadcda;
+  --color-tomato-400: #d9534f;
+  --color-tomato-500: #c1272d;
+  --color-tomato-600: #a81f24;
+  --color-tomato-700: #8a191d;
+
+  /* Charred crust — dark anchor, replaces slate-900/950 */
+  --color-crust-50: #f7f5f4;
+  --color-crust-100: #e9e4e1;
+  --color-crust-600: #4a3f3a;
+  --color-crust-800: #362d29;
+  --color-crust-900: #2d2321;
+  --color-crust-950: #1f1917;
+
+  /* Cheese gold — accent, replaces amber where appropriate */
+  --color-cheese-50: #fef8e8;
+  --color-cheese-100: #fcedc2;
+  --color-cheese-500: #f4b942;
+  --color-cheese-600: #dba02c;
+
+  /* Basil green — success states, replaces emerald */
+  --color-basil-50: #f0f5f1;
+  --color-basil-100: #dbe8de;
+  --color-basil-500: #4a7856;
+  --color-basil-600: #3d6248;
+
+  /* Warm neutrals — replace slate throughout */
+  --color-warm-50: #fbf6ee;
+  --color-warm-100: #f3ebe0;
+  --color-warm-200: #e8dfd6;
+  --color-warm-400: #a89b8f;
+  --color-warm-500: #8a7c6f;
+  --color-warm-700: #5c5147;
 }
 
 body {
   font-family: var(--font-sans);
-  background-color: #fcfcfd;
-  color: #111827;
+  background-color: var(--color-warm-50);
+  color: var(--color-crust-900);
 }
 
 h1, h2, h3, h4 {
