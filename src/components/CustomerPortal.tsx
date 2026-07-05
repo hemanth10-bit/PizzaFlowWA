@@ -21,20 +21,20 @@ const getPizzaImage = (name: string): string => {
 
 const getToppingIcon = (name: string) => {
   const lowercaseName = name.toLowerCase();
-  if (lowercaseName.includes("cheese")) return <Layers className="w-4 h-4 text-amber-500 shrink-0" />;
-  if (lowercaseName.includes("olive")) return <Circle className="w-4 h-4 text-slate-800 fill-slate-800 shrink-0" />;
+  if (lowercaseName.includes("cheese")) return <Layers className="w-4 h-4 text-cheese-600 shrink-0" />;
+  if (lowercaseName.includes("olive")) return <Circle className="w-4 h-4 text-crust-900 fill-crust-900 shrink-0" />;
   if (lowercaseName.includes("mushroom")) return <CircleDot className="w-4 h-4 text-amber-700 shrink-0" />;
   if (lowercaseName.includes("pepper") || lowercaseName.includes("jalapeno") || lowercaseName.includes("peri-peri")) {
-    return <Flame className="w-4 h-4 text-rose-500 shrink-0" />;
+    return <Flame className="w-4 h-4 text-tomato-500 shrink-0" />;
   }
   if (lowercaseName.includes("tomato") || lowercaseName.includes("onion")) {
-    return <Leaf className="w-4 h-4 text-emerald-500 shrink-0" />;
+    return <Leaf className="w-4 h-4 text-basil-500 shrink-0" />;
   }
-  if (lowercaseName.includes("corn")) return <Sparkles className="w-4 h-4 text-yellow-500 shrink-0" />;
+  if (lowercaseName.includes("corn")) return <Sparkles className="w-4 h-4 text-cheese-500 shrink-0" />;
   if (lowercaseName.includes("paneer") || lowercaseName.includes("chicken") || lowercaseName.includes("pepperoni") || lowercaseName.includes("garlic")) {
     return <Box className="w-4 h-4 text-orange-600 shrink-0" />;
   }
-  return <Sparkles className="w-4 h-4 text-indigo-500 shrink-0" />;
+  return <Sparkles className="w-4 h-4 text-tomato-500 shrink-0" />;
 };
 
 const TOPPING_COORDINATES = [
@@ -165,7 +165,6 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
     setCart([...cart, { id: Date.now().toString(), item }]);
     // Reset view
     setActiveView("browse");
-    // Show feedback
   };
 
   // Remove from cart
@@ -189,14 +188,12 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
   const validateForm = (): boolean => {
     const errors: { name?: string; phone?: string } = {};
 
-    // Name check: 2-40 letters and spaces only
     if (!customerName.trim()) {
       errors.name = "Name is required.";
     } else if (!/^[A-Za-z\s]{2,40}$/.test(customerName.trim())) {
       errors.name = "Name must be 2-40 characters, using only letters and spaces.";
     }
 
-    // Phone check: 10 digits starting with 6/7/8/9
     if (!customerPhone.trim()) {
       errors.phone = "Phone number is required.";
     } else if (!/^[6-9]\d{9}$/.test(customerPhone.trim())) {
@@ -234,7 +231,6 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
         throw new Error(data.error || "Failed to place order");
       }
 
-      // Success: notify parent, reset cart and form
       onOrderPlaced(data);
       setCart([]);
       setCustomerName("");
@@ -249,9 +245,9 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
 
   if (loadingMenu) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 text-slate-500">
-        <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p className="font-semibold font-display text-slate-700">Warming up the ovens...</p>
+      <div className="flex flex-col items-center justify-center py-20 text-warm-500">
+        <div className="w-12 h-12 border-4 border-tomato-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+        <p className="font-semibold font-display text-crust-600">Warming up the ovens...</p>
       </div>
     );
   }
@@ -262,7 +258,7 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
         <p className="text-rose-700 font-medium mb-3">{menuError}</p>
         <button
           onClick={() => window.location.reload()}
-          className="bg-indigo-600 text-white font-semibold py-2 px-4 rounded-xl text-sm shadow-sm hover:bg-indigo-700 transition-all cursor-pointer"
+          className="bg-tomato-600 text-white font-semibold py-2 px-4 rounded-full text-sm shadow-sm hover:bg-tomato-700 transition-all cursor-pointer"
         >
           Try Again
         </button>
@@ -278,19 +274,19 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
       <div className="lg:col-span-8 space-y-6">
         {/* Banner with Active Order Tracker Shortcut */}
         {activeOrder && (
-          <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 flex justify-between items-center shadow-xs">
+          <div className="bg-basil-50 border border-basil-100 rounded-2xl p-4 flex justify-between items-center shadow-xs">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-emerald-100 rounded-xl text-emerald-700">
+              <div className="p-2 bg-basil-100 rounded-xl text-basil-600">
                 <CheckCircle className="w-5 h-5 animate-pulse" />
               </div>
               <div>
-                <p className="text-sm font-bold text-emerald-900 font-display">You have an active order: {activeOrder.id}</p>
-                <p className="text-xs text-emerald-700">Status: {activeOrder.status.toUpperCase()}</p>
+                <p className="text-sm font-bold text-basil-600 font-display">You have an active order: {activeOrder.id}</p>
+                <p className="text-xs text-basil-600">Status: {activeOrder.status.toUpperCase()}</p>
               </div>
             </div>
             <button
               onClick={onViewTracker}
-              className="flex items-center gap-1.5 bg-indigo-600 text-white font-semibold text-xs py-2 px-4 rounded-xl hover:bg-indigo-700 transition-all shadow-xs cursor-pointer"
+              className="flex items-center gap-1.5 bg-tomato-600 text-white font-semibold text-xs py-2 px-4 rounded-full hover:bg-tomato-700 transition-all shadow-xs cursor-pointer"
               id="btn-view-tracker"
             >
               Track Order <ChevronRight className="w-3.5 h-3.5" />
@@ -299,15 +295,14 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
         )}
 
         {/* View Toggle (Browse vs Customizer) */}
-        <div className="flex gap-2 p-1.5 bg-slate-100 rounded-2xl w-fit" id="view-toggle-tabs">
+        <div className="flex gap-2 p-1.5 bg-warm-100 rounded-2xl w-fit" id="view-toggle-tabs">
           <button
             onClick={() => {
               setActiveView("browse");
-              // default customize option
               if (pizzas.length > 0) setSelectedPizza(pizzas[0]);
             }}
             className={`font-semibold text-sm px-5 py-2.5 rounded-xl transition-all ${
-              activeView === "browse" ? "bg-white text-indigo-600 shadow-sm" : "text-slate-500 hover:text-slate-950"
+              activeView === "browse" ? "bg-white text-tomato-600 shadow-sm" : "text-warm-500 hover:text-crust-900"
             }`}
             id="tab-browse-menu"
           >
@@ -316,11 +311,11 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
           <button
             onClick={() => setActiveView("customizer")}
             className={`font-semibold text-sm px-5 py-2.5 rounded-xl transition-all flex items-center gap-1.5 ${
-              activeView === "customizer" ? "bg-white text-indigo-600 shadow-sm" : "text-slate-500 hover:text-slate-950"
+              activeView === "customizer" ? "bg-white text-tomato-600 shadow-sm" : "text-warm-500 hover:text-crust-900"
             }`}
             id="tab-pizza-builder"
           >
-            <Sparkles className="w-4 h-4 text-indigo-600" />
+            <Sparkles className="w-4 h-4 text-tomato-500" />
             Pizza Builder
           </button>
         </div>
@@ -334,22 +329,19 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
               exit={{ opacity: 0, y: -10 }}
               className="space-y-6"
             >
-              {/* Header */}
               <div>
-                <h2 className="text-3xl font-extrabold font-display tracking-tight text-slate-900">Choose Your Sizzle</h2>
-                <p className="text-slate-500 text-sm mt-1">Browse Rajan's crafted selections, or start customizing any pizza below.</p>
+                <h2 className="text-3xl font-extrabold font-display tracking-tight text-crust-900">Choose Your Sizzle</h2>
+                <p className="text-warm-500 text-sm mt-1">Browse Rajan's crafted selections, or start customizing any pizza below.</p>
               </div>
 
-              {/* Pizza Cards Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6" id="pizza-cards-grid">
                 {pizzas.map((pizza) => (
                   <motion.div
                     key={pizza.name}
-                    className="bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col overflow-hidden"
+                    className="bg-white rounded-3xl border border-warm-200 shadow-sm hover:shadow-lg hover:shadow-tomato-900/5 transition-all flex flex-col overflow-hidden"
                     whileHover={{ y: -4 }}
                   >
-                    {/* Pizza Image Banner */}
-                    <div className="h-44 w-full relative overflow-hidden bg-slate-100">
+                    <div className="h-44 w-full relative overflow-hidden bg-warm-100">
                       <img
                         src={getPizzaImage(pizza.name)}
                         alt={pizza.name}
@@ -360,8 +352,8 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
                         <span
                           className={`text-2xs font-extrabold px-2.5 py-1 rounded-full backdrop-blur-md shadow-sm ${
                             pizza.category === "Veg"
-                              ? "bg-emerald-500/90 text-white"
-                              : "bg-slate-800/90 text-white"
+                              ? "bg-basil-500/90 text-white"
+                              : "bg-crust-800/90 text-white"
                           }`}
                         >
                           {pizza.category}
@@ -371,21 +363,21 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
 
                     <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
                       <div>
-                        <h4 className="font-extrabold text-lg text-slate-900 font-display leading-tight">{pizza.name}</h4>
-                        <p className="text-xs text-slate-500 mt-1 leading-relaxed line-clamp-2 min-h-[32px]">
+                        <h4 className="font-extrabold text-lg text-crust-900 font-display leading-tight">{pizza.name}</h4>
+                        <p className="text-xs text-warm-500 mt-1 leading-relaxed line-clamp-2 min-h-[32px]">
                           {pizza.description}
                         </p>
                       </div>
 
-                      <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                      <div className="flex items-center justify-between pt-4 border-t border-warm-100">
                         <div>
-                          <span className="text-3xs font-bold text-slate-400 block font-mono uppercase tracking-wider">BASE PRICE</span>
-                          <span className="text-lg font-black text-slate-900 font-mono">₹{pizza.price}</span>
+                          <span className="text-3xs font-bold text-warm-400 block font-mono uppercase tracking-wider">BASE PRICE</span>
+                          <span className="text-lg font-black text-crust-900 font-mono">₹{pizza.price}</span>
                         </div>
 
                         <button
                           onClick={() => handleStartCustomize(pizza)}
-                          className="flex items-center gap-1 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs py-2.5 px-4 rounded-xl transition-all shadow-xs active:scale-95 cursor-pointer"
+                          className="flex items-center gap-1 bg-tomato-600 hover:bg-tomato-700 text-white font-extrabold text-xs py-2.5 px-4 rounded-full transition-all shadow-sm shadow-tomato-900/10 active:scale-95 cursor-pointer"
                           id={`btn-customize-${pizza.name.toLowerCase().replace(/\s+/g, "-")}`}
                         >
                           Customize <ChevronRight className="w-3.5 h-3.5" />
@@ -402,29 +394,24 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-6"
+              className="bg-white rounded-3xl border border-warm-200 p-6 shadow-sm space-y-6"
               id="pizza-customizer-panel"
             >
-              {/* Customizer Header */}
-              <div className="border-b border-slate-200 pb-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div className="border-b border-warm-200 pb-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                  <h3 className="text-2xl font-extrabold font-display text-slate-900 flex items-center gap-2">
-                    <Sparkles className="w-5.5 h-5.5 text-indigo-600 animate-pulse" />
+                  <h3 className="text-2xl font-extrabold font-display text-crust-900 flex items-center gap-2">
+                    <Sparkles className="w-5.5 h-5.5 text-tomato-500 animate-pulse" />
                     Interactive Pizza Customizer
                   </h3>
-                  <p className="text-xs text-slate-500 mt-1">Design your masterclass combo. Real-time validated rules applied.</p>
+                  <p className="text-xs text-warm-500 mt-1">Design your masterclass combo. Real-time validated rules applied.</p>
                 </div>
-                <div className="bg-indigo-50 text-indigo-700 border border-indigo-100 font-bold text-xs px-3 py-1.5 rounded-xl">
+                <div className="bg-tomato-50 text-tomato-600 border border-tomato-100 font-bold text-xs px-3 py-1.5 rounded-full">
                   Max 5 Custom Toppings
                 </div>
               </div>
 
-              {/* Grid split: Left Column: Visual Pizza Canvas, Right Column: Controls */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-                
-                {/* Left Column: Interactive Animated Pizza Canvas */}
-                <div className="lg:col-span-5 bg-gradient-to-b from-slate-50 to-slate-100/70 border border-slate-200/60 rounded-2xl p-6 flex flex-col items-center justify-between min-h-[380px] relative overflow-hidden shadow-inner">
-                  {/* Heat Steam animations */}
+                <div className="lg:col-span-5 bg-gradient-to-b from-warm-50 to-warm-100/70 border border-warm-200/60 rounded-2xl p-6 flex flex-col items-center justify-between min-h-[380px] relative overflow-hidden shadow-inner">
                   <div className="absolute top-4 left-0 right-0 flex justify-center gap-6 pointer-events-none opacity-40">
                     <motion.div 
                       className="w-1.5 h-12 bg-orange-200/50 rounded-full blur-xs"
@@ -432,30 +419,29 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
                       transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
                     />
                     <motion.div 
-                      className="w-1 h-14 bg-amber-100/40 rounded-full blur-xs"
+                      className="w-1 h-14 bg-cheese-100/60 rounded-full blur-xs"
                       animate={{ y: [0, -35, 0], opacity: [0.1, 0.5, 0.1] }}
                       transition={{ repeat: Infinity, duration: 4, ease: "easeInOut", delay: 0.7 }}
                     />
                     <motion.div 
-                      className="w-2 h-10 bg-amber-200/30 rounded-full blur-xs"
+                      className="w-2 h-10 bg-cheese-100/50 rounded-full blur-xs"
                       animate={{ y: [0, -20, 0], opacity: [0.2, 0.6, 0.2] }}
                       transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut", delay: 1.4 }}
                     />
                   </div>
 
                   <div className="text-center">
-                    <span className="text-3xs font-extrabold text-indigo-600 bg-indigo-50 border border-indigo-100 px-2.5 py-1 rounded-full uppercase tracking-wider font-mono">
+                    <span className="text-3xs font-extrabold text-tomato-600 bg-tomato-50 border border-tomato-100 px-2.5 py-1 rounded-full uppercase tracking-wider font-mono">
                       Baking Canvas
                     </span>
-                    <h4 className="text-sm font-black text-slate-800 mt-2 font-display">
+                    <h4 className="text-sm font-black text-crust-800 mt-2 font-display">
                       {selectedPizza?.name || "Custom Build"}
                     </h4>
-                    <p className="text-4xs text-slate-400 mt-0.5 uppercase tracking-widest font-mono">
+                    <p className="text-4xs text-warm-400 mt-0.5 uppercase tracking-widest font-mono">
                       Crust: {selectedBase?.name} ({selectedSize})
                     </p>
                   </div>
 
-                  {/* Circular Pizza with Framer Motion Rotation */}
                   <div className="relative my-4 flex items-center justify-center">
                     <motion.div
                       className="relative rounded-full flex items-center justify-center transition-all duration-300 shadow-md"
@@ -466,7 +452,6 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
                       animate={{ rotate: 360 }}
                       transition={{ repeat: Infinity, duration: 55, ease: "linear" }}
                     >
-                      {/* Baked Pizza Crust outer ring */}
                       <div 
                         className={`absolute inset-0 rounded-full transition-all duration-300 border-amber-600 shadow-lg ${
                           selectedBase?.name.includes("Cheese Burst")
@@ -480,11 +465,8 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
                             : "bg-amber-100 border-[14px]"
                         }`}
                       >
-                        {/* Pizza Sauce & Melted Cheese Inner Base */}
-                        <div className="absolute inset-1.5 bg-red-600 rounded-full overflow-hidden flex items-center justify-center">
-                          {/* Creamy cheesy radial background */}
+                        <div className="absolute inset-1.5 bg-tomato-600 rounded-full overflow-hidden flex items-center justify-center">
                           <div className="absolute inset-1 bg-[radial-gradient(circle_at_center,#fef08a_25%,#eab308_85%)] rounded-full opacity-95 shadow-inner">
-                            {/* Toasted brown cheese spots */}
                             <div className="absolute top-4 left-6 w-3 h-2 bg-amber-800/30 rounded-full blur-[1px]" />
                             <div className="absolute bottom-8 right-12 w-4 h-3 bg-amber-800/40 rounded-full blur-[1px]" />
                             <div className="absolute top-12 right-6 w-2 h-2 bg-amber-900/30 rounded-full blur-[1px]" />
@@ -493,13 +475,11 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
                         </div>
                       </div>
 
-                      {/* Default recipe toppings */}
                       {selectedPizza?.name === "Margherita" && (
                         <>
-                          {/* Tomato sauce details, basil leaves, mozzarella spots */}
-                          <div className="absolute top-8 left-10 w-4 h-5 bg-emerald-600 rounded-tr-3xl rounded-bl-3xl rotate-45 border border-emerald-700 shadow-3xs" />
-                          <div className="absolute bottom-12 left-14 w-5 h-4 bg-emerald-600 rounded-tl-3xl rounded-br-3xl -rotate-12 border border-emerald-700 shadow-3xs" />
-                          <div className="absolute top-14 right-10 w-4 h-5 bg-emerald-600 rounded-tr-3xl rounded-bl-3xl rotate-[115deg] border border-emerald-700 shadow-3xs" />
+                          <div className="absolute top-8 left-10 w-4 h-5 bg-basil-600 rounded-tr-3xl rounded-bl-3xl rotate-45 border border-basil-600 shadow-3xs" />
+                          <div className="absolute bottom-12 left-14 w-5 h-4 bg-basil-600 rounded-tl-3xl rounded-br-3xl -rotate-12 border border-basil-600 shadow-3xs" />
+                          <div className="absolute top-14 right-10 w-4 h-5 bg-basil-600 rounded-tr-3xl rounded-bl-3xl rotate-[115deg] border border-basil-600 shadow-3xs" />
                           <div className="absolute top-12 right-16 w-6 h-4 bg-white/80 rounded-full blur-[1px] opacity-90 shadow-3xs" />
                           <div className="absolute bottom-12 left-10 w-6 h-6 bg-white/95 rounded-full blur-[1px] opacity-90 shadow-3xs" />
                           <div className="absolute top-20 left-16 w-4.5 h-3.5 bg-white/80 rounded-full blur-[1px] opacity-95 shadow-3xs" />
@@ -508,38 +488,32 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
 
                       {selectedPizza?.name.includes("Pepperoni") && (
                         <>
-                          <div className="absolute top-8 left-12 w-5.5 h-5.5 bg-rose-600 rounded-full border-2 border-rose-800 shadow-2xs" />
-                          <div className="absolute top-10 right-12 w-5.5 h-5.5 bg-rose-600 rounded-full border-2 border-rose-800 shadow-2xs" />
-                          <div className="absolute bottom-10 left-14 w-5.5 h-5.5 bg-rose-600 rounded-full border-2 border-rose-800 shadow-2xs" />
-                          <div className="absolute bottom-8 right-12 w-5.5 h-5.5 bg-rose-600 rounded-full border-2 border-rose-800 shadow-2xs" />
-                          <div className="absolute top-[44%] left-[44%] w-5.5 h-5.5 bg-rose-600 rounded-full border-2 border-rose-800 shadow-2xs" />
+                          <div className="absolute top-8 left-12 w-5.5 h-5.5 bg-tomato-600 rounded-full border-2 border-tomato-700 shadow-2xs" />
+                          <div className="absolute top-10 right-12 w-5.5 h-5.5 bg-tomato-600 rounded-full border-2 border-tomato-700 shadow-2xs" />
+                          <div className="absolute bottom-10 left-14 w-5.5 h-5.5 bg-tomato-600 rounded-full border-2 border-tomato-700 shadow-2xs" />
+                          <div className="absolute bottom-8 right-12 w-5.5 h-5.5 bg-tomato-600 rounded-full border-2 border-tomato-700 shadow-2xs" />
+                          <div className="absolute top-[44%] left-[44%] w-5.5 h-5.5 bg-tomato-600 rounded-full border-2 border-tomato-700 shadow-2xs" />
                         </>
                       )}
 
-                      {/* Veggie templates defaults */}
                       {(selectedPizza?.name.includes("Veggie") || selectedPizza?.name.includes("Mediterranean") || selectedPizza?.name.includes("Farm")) && (
                         <>
-                          {/* Green bell peppers */}
-                          <div className="absolute top-8 left-14 w-5 h-1.5 border-t-3 border-emerald-500 rounded-full rotate-45" />
-                          <div className="absolute bottom-10 right-14 w-5 h-1.5 border-t-3 border-emerald-500 rounded-full -rotate-45" />
-                          {/* Black olives */}
-                          <div className="absolute top-10 right-14 w-2.5 h-2.5 bg-slate-900 rounded-full border border-black flex items-center justify-center">
-                            <div className="w-0.5 h-0.5 bg-yellow-400 rounded-full" />
+                          <div className="absolute top-8 left-14 w-5 h-1.5 border-t-3 border-basil-500 rounded-full rotate-45" />
+                          <div className="absolute bottom-10 right-14 w-5 h-1.5 border-t-3 border-basil-500 rounded-full -rotate-45" />
+                          <div className="absolute top-10 right-14 w-2.5 h-2.5 bg-crust-900 rounded-full border border-black flex items-center justify-center">
+                            <div className="w-0.5 h-0.5 bg-cheese-500 rounded-full" />
                           </div>
-                          <div className="absolute bottom-8 left-12 w-2.5 h-2.5 bg-slate-900 rounded-full border border-black flex items-center justify-center">
-                            <div className="w-0.5 h-0.5 bg-yellow-400 rounded-full" />
+                          <div className="absolute bottom-8 left-12 w-2.5 h-2.5 bg-crust-900 rounded-full border border-black flex items-center justify-center">
+                            <div className="w-0.5 h-0.5 bg-cheese-500 rounded-full" />
                           </div>
-                          {/* Red Onions */}
                           <div className="absolute top-[45%] left-[20%] w-4.5 h-1 border-t-2 border-purple-400 rounded-full rotate-12" />
                           <div className="absolute top-[22%] right-[28%] w-4.5 h-1 border-t-2 border-purple-400 rounded-full rotate-90" />
                         </>
                       )}
 
-                      {/* Dynamic Topping visual instances popping with scale */}
                       <AnimatePresence>
                         {selectedToppings.map((toppingName, toppingIdx) => {
                           const icon = getToppingIcon(toppingName);
-                          // Generate 3 scattering indexes
                           const scatteringIndexes = [
                             (toppingIdx * 3) % 8, 
                             (toppingIdx * 3 + 2) % 8, 
@@ -555,7 +529,7 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
                                 animate={{ scale: 1, opacity: 1, y: 0 }}
                                 exit={{ scale: 0, opacity: 0, y: 15 }}
                                 transition={{ type: "spring", stiffness: 220, damping: 15, delay: instIdx * 0.05 }}
-                                className="absolute z-20 pointer-events-none drop-shadow-sm bg-white rounded-full p-1 border border-slate-200/50 flex items-center justify-center scale-75"
+                                className="absolute z-20 pointer-events-none drop-shadow-sm bg-white rounded-full p-1 border border-warm-200/50 flex items-center justify-center scale-75"
                                 style={{
                                   top: coord.top,
                                   left: coord.left,
@@ -570,16 +544,14 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
                     </motion.div>
                   </div>
 
-                  <div className="text-center text-4xs text-slate-400 italic font-mono leading-none mt-2">
+                  <div className="text-center text-4xs text-warm-400 italic font-mono leading-none mt-2">
                     Visual baking simulation. Tap toppings below to dress.
                   </div>
                 </div>
 
-                {/* Right Column: Customizer Selector controls */}
                 <div className="lg:col-span-7 space-y-5 flex flex-col justify-between">
-                  {/* Pizza Select */}
                   <div>
-                    <label className="text-xs font-bold text-slate-400 font-mono block mb-2 uppercase">1. CHOOSE TEMPLATE</label>
+                    <label className="text-xs font-bold text-warm-400 font-mono block mb-2 uppercase">1. CHOOSE TEMPLATE</label>
                     <select
                       value={selectedPizza?.name || ""}
                       onChange={(e) => {
@@ -591,7 +563,7 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
                           }
                         }
                       }}
-                      className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-800 font-semibold text-sm p-3 rounded-xl transition-all outline-none"
+                      className="w-full bg-warm-50 border border-warm-200 focus:border-tomato-500 focus:bg-white text-crust-800 font-semibold text-sm p-3 rounded-xl transition-all outline-none"
                       id="select-pizza-template"
                     >
                       {pizzas.map((p) => (
@@ -602,9 +574,8 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
                     </select>
                   </div>
 
-                  {/* Base Select */}
                   <div>
-                    <label className="text-xs font-bold text-slate-400 font-mono block mb-2 uppercase">2. SELECT CRUST BASE</label>
+                    <label className="text-xs font-bold text-warm-400 font-mono block mb-2 uppercase">2. SELECT CRUST BASE</label>
                     <div className="space-y-2" id="crust-selection-list">
                       {bases.map((b) => (
                         <button
@@ -612,23 +583,22 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
                           onClick={() => setSelectedBase(b)}
                           className={`w-full text-left p-3 rounded-xl border transition-all flex items-center justify-between cursor-pointer ${
                             selectedBase?.name === b.name
-                              ? "bg-indigo-50 border-indigo-200 ring-2 ring-indigo-100 shadow-3xs"
-                              : "bg-white border-slate-200 hover:border-slate-300"
+                              ? "bg-tomato-50 border-tomato-200 ring-2 ring-tomato-100 shadow-3xs"
+                              : "bg-white border-warm-200 hover:border-warm-400"
                           }`}
                         >
                           <div>
-                            <span className="font-bold text-sm text-slate-800 block">{b.name}</span>
-                            <span className="text-3xs text-slate-400 leading-none">{b.description}</span>
+                            <span className="font-bold text-sm text-crust-800 block">{b.name}</span>
+                            <span className="text-3xs text-warm-400 leading-none">{b.description}</span>
                           </div>
-                          <span className="font-mono text-sm font-extrabold text-slate-700">+₹{b.price}</span>
+                          <span className="font-mono text-sm font-extrabold text-crust-600">+₹{b.price}</span>
                         </button>
                       ))}
                     </div>
                   </div>
 
-                  {/* Size Selector */}
                   <div>
-                    <label className="text-xs font-bold text-slate-400 font-mono block mb-2 uppercase">3. SELECT PIZZA SIZE</label>
+                    <label className="text-xs font-bold text-warm-400 font-mono block mb-2 uppercase">3. SELECT PIZZA SIZE</label>
                     <div className="grid grid-cols-3 gap-2" id="size-options">
                       {[
                         { size: "Small", multi: "1.0x", desc: "Personal" },
@@ -640,30 +610,29 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
                           onClick={() => setSelectedSize(item.size as any)}
                           className={`p-3 rounded-xl border text-center transition-all cursor-pointer ${
                             selectedSize === item.size
-                              ? "bg-indigo-50 border-indigo-200 ring-2 ring-indigo-100 shadow-3xs font-bold text-indigo-700"
-                              : "bg-white border-slate-200 hover:border-slate-300 font-semibold text-slate-700"
+                              ? "bg-tomato-50 border-tomato-200 ring-2 ring-tomato-100 shadow-3xs font-bold text-tomato-600"
+                              : "bg-white border-warm-200 hover:border-warm-400 font-semibold text-crust-600"
                           }`}
                         >
                           <span className="text-sm block">{item.size}</span>
-                          <span className="text-4xs text-slate-400 block tracking-wider mt-0.5">{item.desc} ({item.multi})</span>
+                          <span className="text-4xs text-warm-400 block tracking-wider mt-0.5">{item.desc} ({item.multi})</span>
                         </button>
                       ))}
                     </div>
                   </div>
 
-                  {/* Toppings Selector */}
                   <div>
                     <div className="flex justify-between mb-2">
-                      <label className="text-xs font-bold text-slate-400 font-mono block uppercase">4. ADD TOPPINGS ({selectedToppings.length}/5)</label>
+                      <label className="text-xs font-bold text-warm-400 font-mono block uppercase">4. ADD TOPPINGS ({selectedToppings.length}/5)</label>
                     </div>
 
                     {selectedPizza?.name === "Margherita" ? (
-                      <div className="p-5 bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-center space-y-2">
-                        <div className="mx-auto w-9 h-9 bg-amber-50 rounded-full flex items-center justify-center text-amber-500">
+                      <div className="p-5 bg-warm-50 rounded-2xl border border-dashed border-warm-200 text-center space-y-2">
+                        <div className="mx-auto w-9 h-9 bg-cheese-50 rounded-full flex items-center justify-center text-cheese-600">
                           <Check className="w-5 h-5 animate-pulse" />
                         </div>
-                        <p className="text-xs font-bold text-slate-700">Classic Margherita Recipe</p>
-                        <p className="text-4xs text-slate-400 leading-normal max-w-xs mx-auto">
+                        <p className="text-xs font-bold text-crust-600">Classic Margherita Recipe</p>
+                        <p className="text-4xs text-warm-400 leading-normal max-w-xs mx-auto">
                           Classic Margherita is strictly styled with its signature mozzarella, tomato sauce, and basil. For optimal flavor integrity, additional toppings are restricted.
                         </p>
                       </div>
@@ -677,15 +646,15 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
                               onClick={() => handleToggleTopping(t.name)}
                               className={`p-2.5 rounded-xl border transition-all text-left flex items-center justify-between text-xs cursor-pointer ${
                                 isSelected
-                                  ? "bg-indigo-50 border-indigo-200 font-bold text-indigo-900 shadow-3xs"
-                                  : "bg-white border-slate-200 hover:border-slate-300 font-medium text-slate-700"
+                                  ? "bg-tomato-50 border-tomato-200 font-bold text-tomato-700 shadow-3xs"
+                                  : "bg-white border-warm-200 hover:border-warm-400 font-medium text-crust-600"
                               }`}
                             >
                               <div className="flex items-center gap-2 truncate">
                                 {getToppingIcon(t.name)}
                                 <span className="truncate">{t.name}</span>
                               </div>
-                              <span className="font-mono text-slate-400 shrink-0">+₹{t.price}</span>
+                              <span className="font-mono text-warm-400 shrink-0">+₹{t.price}</span>
                             </button>
                           );
                         })}
@@ -695,39 +664,35 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
                 </div>
               </div>
 
-              {/* Summary and Quantity */}
-              <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200/60 flex flex-col sm:flex-row justify-between items-center gap-4">
-                {/* Quantity Controls */}
-                <div className="flex items-center gap-3 bg-white border border-slate-200 rounded-xl p-1.5 shrink-0">
+              <div className="bg-warm-50 rounded-2xl p-5 border border-warm-200/60 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div className="flex items-center gap-3 bg-white border border-warm-200 rounded-full p-1.5 shrink-0">
                   <button
                     onClick={() => setCustomizerQty(Math.max(1, customizerQty - 1))}
-                    className="p-1 text-slate-500 hover:text-slate-900 rounded-lg hover:bg-slate-100"
+                    className="p-1 text-warm-500 hover:text-crust-900 rounded-full hover:bg-warm-100"
                   >
                     <Minus className="w-4 h-4" />
                   </button>
                   <span className="font-bold text-sm w-8 text-center font-mono">{customizerQty}</span>
                   <button
                     onClick={() => setCustomizerQty(Math.min(10, customizerQty + 1))}
-                    className="p-1 text-slate-500 hover:text-slate-900 rounded-lg hover:bg-slate-100"
+                    className="p-1 text-warm-500 hover:text-crust-900 rounded-full hover:bg-warm-100"
                   >
                     <Plus className="w-4 h-4" />
                   </button>
                 </div>
 
-                {/* Subtotal preview */}
                 <div className="text-center sm:text-right flex-1">
-                  <p className="text-3xs font-bold text-slate-400 font-mono uppercase tracking-wider">PIZZA BUILD PRICE</p>
-                  <p className="text-2xl font-black text-slate-900 font-mono">
+                  <p className="text-3xs font-bold text-warm-400 font-mono uppercase tracking-wider">PIZZA BUILD PRICE</p>
+                  <p className="text-2xl font-black text-crust-900 font-mono">
                     ₹{calculateCustomizerPrice() * customizerQty}
                   </p>
-                  <p className="text-4xs text-slate-400 mt-0.5">₹{calculateCustomizerPrice()} each x {customizerQty}</p>
+                  <p className="text-4xs text-warm-400 mt-0.5">₹{calculateCustomizerPrice()} each x {customizerQty}</p>
                 </div>
 
-                {/* Action button */}
                 <button
                   onClick={handleAddToCart}
                   disabled={!selectedPizza || !selectedBase}
-                  className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-extrabold text-sm py-3.5 px-6 rounded-xl transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full sm:w-auto bg-tomato-600 hover:bg-tomato-700 disabled:opacity-50 text-white font-extrabold text-sm py-3.5 px-6 rounded-full transition-all shadow-sm shadow-tomato-900/10 hover:shadow-md flex items-center justify-center gap-2 cursor-pointer"
                   id="btn-add-to-cart"
                 >
                   <ShoppingBag className="w-4.5 h-4.5" />
@@ -740,42 +705,41 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
       </div>
 
       {/* Right Column: Checkout Cart Form */}
-      <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-6 sticky top-6" id="checkout-sidebar">
+      <div className="lg:col-span-4 bg-white rounded-3xl border border-warm-200 p-6 shadow-sm space-y-6 sticky top-6" id="checkout-sidebar">
         <div>
-          <h3 className="text-lg font-black font-display text-slate-900 flex items-center gap-2">
-            <ShoppingBag className="w-5 h-5 text-indigo-600" />
+          <h3 className="text-lg font-black font-display text-crust-900 flex items-center gap-2">
+            <ShoppingBag className="w-5 h-5 text-tomato-500" />
             Sizzling Checkout Cart
           </h3>
-          <p className="text-xs text-slate-500">View items, quantities, and place your order</p>
+          <p className="text-xs text-warm-500">View items, quantities, and place your order</p>
         </div>
 
-        {/* Cart items list */}
-        <div className="space-y-3 max-h-[220px] overflow-y-auto pr-1 border-b border-slate-100 pb-4" id="cart-items-container">
+        <div className="space-y-3 max-h-[220px] overflow-y-auto pr-1 border-b border-warm-100 pb-4" id="cart-items-container">
           {cart.length === 0 ? (
-            <div className="text-center py-8 text-slate-400 flex flex-col items-center">
+            <div className="text-center py-8 text-warm-400 flex flex-col items-center">
               <PizzaIcon className="w-8 h-8 opacity-40 mb-2 stroke-[1.5]" />
               <p className="text-xs font-semibold">Your pizza box is empty!</p>
-              <p className="text-4xs text-slate-400 mt-1">Add items to build your feast.</p>
+              <p className="text-4xs text-warm-400 mt-1">Add items to build your feast.</p>
             </div>
           ) : (
             cart.map(({ id, item }) => (
-              <div key={id} className="flex justify-between items-start text-xs border-b border-slate-100 pb-3 last:border-0 last:pb-0">
+              <div key={id} className="flex justify-between items-start text-xs border-b border-warm-100 pb-3 last:border-0 last:pb-0">
                 <div className="flex-1 min-w-0 pr-2">
                   <div className="flex items-center gap-1.5">
-                    <span className="font-black text-slate-800">{item.quantity}x</span>
-                    <span className="font-semibold text-slate-800 truncate font-display">{item.pizzaName}</span>
-                    <span className="text-4xs font-mono text-slate-400">({item.size})</span>
+                    <span className="font-black text-crust-800">{item.quantity}x</span>
+                    <span className="font-semibold text-crust-800 truncate font-display">{item.pizzaName}</span>
+                    <span className="text-4xs font-mono text-warm-400">({item.size})</span>
                   </div>
-                  <p className="text-4xs text-slate-400 truncate pl-5">
+                  <p className="text-4xs text-warm-400 truncate pl-5">
                     Crust: {item.baseName}
                     {item.toppings.length > 0 && ` • Toppings: ${item.toppings.join(", ")}`}
                   </p>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                  <span className="font-mono text-xs font-bold text-slate-700">₹{item.price * item.quantity}</span>
+                  <span className="font-mono text-xs font-bold text-crust-600">₹{item.price * item.quantity}</span>
                   <button
                     onClick={() => handleRemoveFromCart(id)}
-                    className="p-1 text-slate-300 hover:text-indigo-600 hover:bg-slate-50 rounded-lg transition-colors cursor-pointer"
+                    className="p-1 text-warm-400 hover:text-tomato-600 hover:bg-warm-50 rounded-lg transition-colors cursor-pointer"
                     title="Remove item"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -786,80 +750,85 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
           )}
         </div>
 
-        {/* Totals panel */}
+        {/* Totals panel — styled as a torn paper receipt (signature element) */}
         {cart.length > 0 && (
-          <div className="space-y-2 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs font-mono">
-            <div className="flex justify-between text-slate-500">
-              <span>Subtotal</span>
-              <span>₹{subtotal}</span>
-            </div>
-            {discount > 0 && (
-              <div className="flex justify-between text-emerald-600 font-bold">
-                <span>10% Qty Discount</span>
-                <span>-₹{discount}</span>
+          <div
+            className="relative bg-warm-50 px-5 pt-5 pb-4 border-x border-t border-dashed border-warm-400/50 text-xs font-mono -rotate-[0.4deg]"
+            style={{
+              clipPath:
+                "polygon(0% 2%, 4% 0%, 8% 2%, 12% 0%, 16% 2%, 20% 0%, 24% 2%, 28% 0%, 32% 2%, 36% 0%, 40% 2%, 44% 0%, 48% 2%, 52% 0%, 56% 2%, 60% 0%, 64% 2%, 68% 0%, 72% 2%, 76% 0%, 80% 2%, 84% 0%, 88% 2%, 92% 0%, 96% 2%, 100% 0%, 100% 100%, 0% 100%)",
+            }}
+          >
+            <p className="text-center text-4xs uppercase tracking-[0.2em] text-warm-500 mb-3">— Order Receipt —</p>
+            <div className="space-y-2">
+              <div className="flex justify-between text-warm-500">
+                <span>Subtotal</span>
+                <span>₹{subtotal}</span>
               </div>
-            )}
-            <div className="flex justify-between text-slate-500">
-              <span>GST (18%)</span>
-              <span>₹{gst}</span>
-            </div>
-            <div className="h-[1px] bg-slate-200 my-1.5"></div>
-            <div className="flex justify-between text-sm font-extrabold text-slate-900">
-              <span>Total Bill</span>
-              <span>₹{total}</span>
+              {discount > 0 && (
+                <div className="flex justify-between text-basil-600 font-bold">
+                  <span>10% Qty Discount</span>
+                  <span>-₹{discount}</span>
+                </div>
+              )}
+              <div className="flex justify-between text-warm-500">
+                <span>GST (18%)</span>
+                <span>₹{gst}</span>
+              </div>
+              <div className="border-t border-dashed border-warm-400/60 my-1.5"></div>
+              <div className="flex justify-between text-sm font-extrabold text-crust-900">
+                <span>Total Bill</span>
+                <span>₹{total}</span>
+              </div>
             </div>
 
             {totalPizzas >= 5 ? (
-              <p className="text-3xs text-emerald-600 font-semibold text-center mt-2 flex items-center justify-center gap-1">
+              <p className="text-3xs text-basil-600 font-semibold text-center mt-3 flex items-center justify-center gap-1">
                 <Sparkles className="w-3.5 h-3.5" /> Quantity Discount Applied!
               </p>
             ) : (
-              <p className="text-4xs text-slate-400 text-center mt-2 leading-tight">
+              <p className="text-4xs text-warm-400 text-center mt-3 leading-tight">
                 Add {5 - totalPizzas} more pizza{5 - totalPizzas > 1 ? "s" : ""} to activate 10% auto discount!
               </p>
             )}
           </div>
         )}
 
-        {/* Customer Intake Checkout Form */}
         <form onSubmit={handleCheckout} className="space-y-4 pt-2">
-          {/* Customer Name */}
           <div>
-            <label className="text-3xs font-bold text-slate-400 font-mono uppercase block mb-1">Customer Name</label>
+            <label className="text-3xs font-bold text-warm-400 font-mono uppercase block mb-1">Customer Name</label>
             <div className="relative">
-              <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-warm-400" />
               <input
                 type="text"
                 value={customerName}
                 onChange={(e) => setCustomerName(e.target.value)}
                 placeholder="Enter full name"
-                className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-xs p-3 pl-10 rounded-xl outline-none transition-all"
+                className="w-full bg-warm-50 border border-warm-200 focus:border-tomato-500 focus:bg-white text-xs p-3 pl-10 rounded-xl outline-none transition-all"
                 id="input-customer-name"
               />
             </div>
             {formErrors.name && <p className="text-rose-600 text-4xs font-semibold mt-1">{formErrors.name}</p>}
           </div>
 
-          {/* Customer Phone */}
           <div>
-            <label className="text-3xs font-bold text-slate-400 font-mono uppercase block mb-1">Mobile Phone (10 digits)</label>
+            <label className="text-3xs font-bold text-warm-400 font-mono uppercase block mb-1">Mobile Phone (10 digits)</label>
             <div className="relative">
-              <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-warm-400" />
               <input
                 type="text"
                 value={customerPhone}
                 onChange={(e) => setCustomerPhone(e.target.value)}
                 placeholder="6xxxxxxxxx, 7xxxxxxxx..."
-                className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-xs p-3 pl-10 rounded-xl outline-none transition-all"
+                className="w-full bg-warm-50 border border-warm-200 focus:border-tomato-500 focus:bg-white text-xs p-3 pl-10 rounded-xl outline-none transition-all"
                 id="input-customer-phone"
               />
             </div>
             {formErrors.phone && <p className="text-rose-600 text-4xs font-semibold mt-1">{formErrors.phone}</p>}
           </div>
 
-          {/* Payment Mode */}
           <div>
-            <label className="text-3xs font-bold text-slate-400 font-mono uppercase block mb-1">Payment Mode</label>
+            <label className="text-3xs font-bold text-warm-400 font-mono uppercase block mb-1">Payment Mode</label>
             <div className="grid grid-cols-3 gap-2" id="payment-modes">
               {["UPI", "Card", "Cash"].map((mode) => (
                 <button
@@ -868,8 +837,8 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
                   onClick={() => setPaymentMode(mode as any)}
                   className={`p-2 rounded-xl border text-center text-xs transition-all cursor-pointer ${
                     paymentMode === mode
-                      ? "bg-indigo-50 border-indigo-200 font-bold text-indigo-700"
-                      : "bg-white border-slate-200 hover:border-slate-300 text-slate-600"
+                      ? "bg-tomato-50 border-tomato-200 font-bold text-tomato-700"
+                      : "bg-white border-warm-200 hover:border-warm-400 text-crust-600"
                   }`}
                 >
                   {mode}
@@ -878,18 +847,16 @@ export default function CustomerPortal({ onOrderPlaced, activeOrder, onViewTrack
             </div>
           </div>
 
-          {/* Error / Feedback Block */}
           {formErrors.general && (
             <p className="text-rose-600 text-3xs font-bold text-center bg-rose-50 border border-rose-100 p-2.5 rounded-xl">
               {formErrors.general}
             </p>
           )}
 
-          {/* Checkout Button */}
           <button
             type="submit"
             disabled={cart.length === 0 || submittingOrder}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-extrabold text-sm py-3.5 px-4 rounded-xl transition-all shadow-xs hover:shadow-sm flex items-center justify-center gap-2 cursor-pointer active:scale-98"
+            className="w-full bg-tomato-600 hover:bg-tomato-700 disabled:opacity-50 text-white font-extrabold text-sm py-3.5 px-4 rounded-full transition-all shadow-sm shadow-tomato-900/10 hover:shadow-md flex items-center justify-center gap-2 cursor-pointer active:scale-98"
             id="btn-checkout-submit"
           >
             {submittingOrder ? (
