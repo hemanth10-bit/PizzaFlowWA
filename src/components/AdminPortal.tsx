@@ -167,7 +167,25 @@ export default function AdminPortal({ onStatusChange, orders, onRefreshOrders }:
       });
     return Object.keys(counts).map((name) => ({ name, value: Math.round(counts[name]) }));
   };
+  const getRecurringCustomers = () => {
+   const customerMap = {};
+   orders
+    .filter((o) => o.status === "completed")
+    .forEach((o) => {
+      const phone = o.customerPhone;
+      if (!customerMap[phone]) {
+        customerMap[phone] = { name: o.customerName, phone, orderCount: 0, totalSpent: 0 };
+      }
+      customerMap[phone].orderCount += 1;
+      customerMap[phone].totalSpent += o.total;
+      // Keep the most recent name on file, in case of minor variations
+      customerMap[phone].name = o.customerName;
+    });
 
+  return Object.values(customerMap)
+    .filter((c) => c.orderCount > 1)
+    .sort((a, b) => b.orderCount - a.orderCount);
+};
   // Totals
   const totalCompletedOrders = orders.filter((o) => o.status === "completed").length;
   const totalRevenue = orders.filter((o) => o.status === "completed").reduce((sum, o) => sum + o.total, 0);
@@ -711,7 +729,46 @@ export default function AdminPortal({ onStatusChange, orders, onRefreshOrders }:
                 )}
               </div>
             </div>
+            {/* Recurring Customers */}
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
+            <div className="flex justify-between items-center">
+              <h3 className="text-sm font-bold text-slate-800 font-mono uppercase tracking-wider">RECURRING CUSTOMERS</h3>
+             <span className="text-3xs font-mono text-slate-400">{getRecurringCustomers().length} repeat customer(s)</span>
+            </div>
 
+             {getRecurringCustomers().length === 0 ? (
+              <div className="flex items-center justify-center h-24 text-slate-400 text-xs">
+                No repeat customers yet — every completed order so far is from a first-time customer.
+              </div>
+          ) : (
+              <div className="overflow-x-auto border border-slate-200 rounded-xl">
+               <table className="w-full text-xs text-left text-slate-700">
+                <thead className="bg-slate-50 text-slate-400 font-mono text-3xs uppercase border-b border-slate-200">
+                 <tr>
+                  <th className="p-3 font-semibold">Customer Name</th>
+                   <th className="p-3 font-semibold">Phone Number</th>
+                    <th className="p-3 font-semibold">Orders Placed</th>
+                      <th className="p-3 font-semibold">Total Spent</th>
+                       </tr>
+                     </thead>
+                     <tbody className="divide-y divide-slate-100">
+                       {getRecurringCustomers().map((c) => (
+                        <tr key={c.phone} className="hover:bg-slate-50/50">
+                         <td className="p-3 font-bold text-slate-900">{c.name}</td>
+                         <td className="p-3 font-mono text-slate-500">{c.phone}</td>
+                         <td className="p-3">
+                           <span className="bg-indigo-50 text-indigo-600 font-mono text-3xs font-extrabold px-2 py-0.5 rounded-md">
+                            {c.orderCount}x
+                           </span>
+                          </td>
+                          <td className="p-3 font-mono font-semibold">₹{Math.round(c.totalSpent).toLocaleString()}</td>
+                        </tr>
+                       ))}
+                     </tbody>
+                    </table>
+                   </div>
+                 )}
+              </div>
             {/* Pizza Sales Breakdown & Payment methods split */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Pizza Sales volume */}
