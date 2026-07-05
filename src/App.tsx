@@ -6,29 +6,32 @@ import { Order } from "./types";
 import { Pizza, ShieldAlert, Sparkles, ShoppingBag, Eye, User, Clock, Heart, ChefHat, Lock, Unlock, LogOut, Key, Settings } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { getApiUrl } from "./lib/api";
+import { supabase } from "./lib/supabaseClient";
 
 export default function App() {
   // Navigation: customer vs admin
   const [viewMode, setViewMode] = useState<"customer" | "admin">("customer");
 
-  // Check if admin credentials have been set in localStorage
-  const [hasAdminCredentials, setHasAdminCredentials] = useState<boolean>(() => {
-    return !!localStorage.getItem("staff_admin_email") && !!localStorage.getItem("staff_admin_password");
-  });
-
-  // Setup / Registration state
-  const [newEmail, setNewEmail] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [setupError, setSetupError] = useState("");
-
-  // Staff Authentication state
-  const [isStaffAuthenticated, setIsStaffAuthenticated] = useState<boolean>(() => {
-    return sessionStorage.getItem("staff_auth") === "true";
-  });
+  // Staff Authentication state — backed by real Supabase Auth sessions
+  const [isStaffAuthenticated, setIsStaffAuthenticated] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
+  const [loggingIn, setLoggingIn] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsStaffAuthenticated(!!session);
+      setAuthChecked(true);
+    });
+
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsStaffAuthenticated(!!session);
+    });
+
+    return () => listener.subscription.unsubscribe();
+  }, []);
 
   // Orders state
   const [orders, setOrders] = useState<Order[]>([]);
@@ -124,36 +127,8 @@ export default function App() {
             {viewMode === "admin" && isStaffAuthenticated && (
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => {
-                    if (confirm("Are you sure you want to reset your credentials? This will log you out, clear all saved logins, and prompt you to set new admin credentials immediately.")) {
-                      localStorage.removeItem("staff_admin_email");
-                      localStorage.removeItem("staff_admin_password");
-                      sessionStorage.removeItem("staff_auth");
-                      
-                      // Fully reset input states
-                      setNewEmail("");
-                      setNewPassword("");
-                      setConfirmPassword("");
-                      setEmail("");
-                      setPassword("");
-                      setLoginError("");
-                      setSetupError("");
-                      
-                      setHasAdminCredentials(false);
-                      setIsStaffAuthenticated(false);
-                    }
-                  }}
-                  className="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs py-2 px-3 rounded-xl border border-slate-200 transition-all cursor-pointer"
-                  id="btn-nav-reset-password"
-                >
-                  <Settings className="w-3.5 h-3.5 text-indigo-600" />
-                  Reset Password
-                </button>
-
-                <button
-                  onClick={() => {
-                    sessionStorage.removeItem("staff_auth");
-                    setIsStaffAuthenticated(false);
+                  onClick={async () => {
+                    await supabase.auth.signOut();
                   }}
                   className="flex items-center gap-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs py-2 px-3 rounded-xl border border-rose-100 transition-all cursor-pointer"
                   id="btn-nav-logout"
@@ -183,122 +158,7 @@ export default function App() {
                 onViewTracker={() => setShowTracker(true)}
               />
             </motion.div>
-          ) : !hasAdminCredentials ? (
-            <motion.div
-              key="staff-setup"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="max-w-md mx-auto my-12 bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden"
-              id="staff-setup-panel"
-            >
-              <div className="bg-gradient-to-br from-indigo-900 to-slate-950 p-8 text-center text-white relative overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,0.2),transparent_60%)]"></div>
-                <div className="relative z-10">
-                  <div className="mx-auto w-12 h-12 bg-indigo-600/30 border border-indigo-500/50 rounded-2xl flex items-center justify-center text-indigo-400 mb-4 shadow-inner">
-                    <Key className="w-5.5 h-5.5 animate-bounce" />
-                  </div>
-                  <h2 className="text-2xl font-black font-display tracking-tight leading-none">Set Admin Credentials</h2>
-                  <p className="text-slate-400 text-2xs mt-2 uppercase tracking-widest font-mono">First-Time Setup</p>
-                </div>
-              </div>
-
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  const cleanEmail = newEmail.trim();
-                  const cleanPass = newPassword;
-                  if (!cleanEmail.includes("@") || cleanEmail.length < 5) {
-                    setSetupError("Please enter a valid email address.");
-                    return;
-                  }
-                  if (cleanPass.length < 5) {
-                    setSetupError("Password must be at least 5 characters.");
-                    return;
-                  }
-                  if (cleanPass !== confirmPassword) {
-                    setSetupError("Passwords do not match.");
-                    return;
-                  }
-
-                  localStorage.setItem("staff_admin_email", cleanEmail);
-                  localStorage.setItem("staff_admin_password", cleanPass);
-                  sessionStorage.setItem("staff_auth", "true");
-                  
-                  setHasAdminCredentials(true);
-                  setIsStaffAuthenticated(true);
-                  setSetupError("");
-                  setNewEmail("");
-                  setNewPassword("");
-                  setConfirmPassword("");
-                }}
-                className="p-8 space-y-4"
-              >
-                {setupError && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="p-3.5 bg-rose-50 border border-rose-100 text-rose-700 rounded-xl text-xs font-semibold flex items-center gap-2.5"
-                  >
-                    <ShieldAlert className="w-4 h-4 shrink-0" />
-                    <span>{setupError}</span>
-                  </motion.div>
-                )}
-
-                <p className="text-xs text-slate-500 font-medium leading-relaxed mb-1">
-                  Please configure your administrative credentials. These will be saved locally in your browser for all future visits.
-                </p>
-
-                <div className="space-y-1.5">
-                  <label className="text-3xs font-bold text-slate-400 font-mono uppercase tracking-wider block">Set Email Address</label>
-                  <input
-                    type="email"
-                    required
-                    value={newEmail}
-                    onChange={(e) => setNewEmail(e.target.value)}
-                    placeholder="admin@pizza.com"
-                    className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-800 font-semibold text-xs p-3.5 rounded-xl transition-all outline-none"
-                    id="setup-email"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-3xs font-bold text-slate-400 font-mono uppercase tracking-wider block">Set Password</label>
-                  <input
-                    type="password"
-                    required
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="At least 5 characters"
-                    className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-800 font-semibold text-xs p-3.5 rounded-xl transition-all outline-none"
-                    id="setup-password"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-3xs font-bold text-slate-400 font-mono uppercase tracking-wider block">Confirm Password</label>
-                  <input
-                    type="password"
-                    required
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Repeat password"
-                    className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-800 font-semibold text-xs p-3.5 rounded-xl transition-all outline-none"
-                    id="setup-confirm-password"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs py-4 px-6 rounded-xl transition-all shadow-md active:scale-98 cursor-pointer mt-4 flex items-center justify-center gap-2"
-                  id="btn-setup-submit"
-                >
-                  <Unlock className="w-4 h-4" />
-                  Save & Authorize Access
-                </button>
-              </form>
-            </motion.div>
-          ) : !isStaffAuthenticated ? (
+          ) : !authChecked ? null : !isStaffAuthenticated ? (
             <motion.div
               key="staff-login"
               initial={{ opacity: 0, scale: 0.95 }}
@@ -319,18 +179,19 @@ export default function App() {
               </div>
 
               <form
-                onSubmit={(e) => {
+                onSubmit={async (e) => {
                   e.preventDefault();
-                  const savedEmail = localStorage.getItem("staff_admin_email") || "";
-                  const savedPass = localStorage.getItem("staff_admin_password") || "";
-
-                  if (email.trim().toLowerCase() === savedEmail.toLowerCase() && password === savedPass) {
-                    sessionStorage.setItem("staff_auth", "true");
-                    setIsStaffAuthenticated(true);
-                    setLoginError("");
-                    setPassword("");
-                  } else {
+                  setLoggingIn(true);
+                  setLoginError("");
+                  const { error } = await supabase.auth.signInWithPassword({
+                    email: email.trim(),
+                    password,
+                  });
+                  setLoggingIn(false);
+                  if (error) {
                     setLoginError("Invalid email or password. Please try again.");
+                  } else {
+                    setPassword("");
                   }
                 }}
                 className="p-8 space-y-5"
@@ -353,7 +214,7 @@ export default function App() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your custom email"
+                    placeholder="you@slicematic.com"
                     className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-800 font-semibold text-xs p-3.5 rounded-xl transition-all outline-none"
                     id="login-email"
                   />
@@ -374,43 +235,12 @@ export default function App() {
 
                 <button
                   type="submit"
-                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs py-4 px-6 rounded-xl transition-all shadow-md active:scale-98 cursor-pointer mt-2"
+                  disabled={loggingIn}
+                  className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-extrabold text-xs py-4 px-6 rounded-xl transition-all shadow-md active:scale-98 cursor-pointer mt-2"
                   id="btn-login-submit"
                 >
-                  Authorize Access
+                  {loggingIn ? "Authorizing..." : "Authorize Access"}
                 </button>
-
-                <div className="pt-4 border-t border-slate-100 text-center flex flex-col items-center gap-2">
-                  <p className="text-3xs text-slate-400 font-medium">
-                    Forgot credentials or want to change them?
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (confirm("Are you sure you want to reset your credentials? This will wipe your saved email and password, and you will need to set them again.")) {
-                        localStorage.removeItem("staff_admin_email");
-                        localStorage.removeItem("staff_admin_password");
-                        sessionStorage.removeItem("staff_auth");
-                        
-                        // Fully reset states
-                        setNewEmail("");
-                        setNewPassword("");
-                        setConfirmPassword("");
-                        setEmail("");
-                        setPassword("");
-                        setLoginError("");
-                        setSetupError("");
-                        
-                        setHasAdminCredentials(false);
-                        setIsStaffAuthenticated(false);
-                      }
-                    }}
-                    className="text-3xs text-indigo-600 hover:text-indigo-800 font-bold underline cursor-pointer"
-                    id="btn-reset-auth"
-                  >
-                    Reset & Set New Credentials
-                  </button>
-                </div>
               </form>
             </motion.div>
           ) : (
